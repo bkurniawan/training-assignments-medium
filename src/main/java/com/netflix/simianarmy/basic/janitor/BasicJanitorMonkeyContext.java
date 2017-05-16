@@ -90,6 +90,8 @@ public class BasicJanitorMonkeyContext extends BasicSimianArmyContext implements
      * The constructor.
      */
     public BasicJanitorMonkeyContext() {
+
+    	
         super("simianarmy.properties", "client.properties", "janitor.properties");
 
         monkeyRegion = region();
@@ -104,6 +106,8 @@ public class BasicJanitorMonkeyContext extends BasicSimianArmyContext implements
         String dbPass = configuration().getStr("simianarmy.recorder.db.pass");
         String dbUrl = configuration().getStr("simianarmy.recorder.db.url");
         String dbTable = configuration().getStr("simianarmy.janitor.resources.db.table");
+
+        JanitorRuleEngine ruleEngine = createJanitorRuleEngine();
         
         if (dbDriver == null) {       
         	janitorResourceTracker = new SimpleDBJanitorResourceTracker(awsClient(), resourceDomain);
@@ -172,7 +176,7 @@ public class BasicJanitorMonkeyContext extends BasicSimianArmyContext implements
     }
 
     private ASGJanitor getASGJanitor() {
-        JanitorRuleEngine ruleEngine = createJanitorRuleEngine();
+        //JanitorRuleEngine ruleEngine = createJanitorRuleEngine();
         boolean discoveryEnabled = configuration().getBoolOrElse("simianarmy.janitor.Eureka.enabled", false);
         ASGInstanceValidator instanceValidator;
         if (discoveryEnabled) {
@@ -226,7 +230,7 @@ public class BasicJanitorMonkeyContext extends BasicSimianArmyContext implements
     }
 
     private InstanceJanitor getInstanceJanitor() {
-        JanitorRuleEngine ruleEngine = createJanitorRuleEngine();
+        //JanitorRuleEngine ruleEngine = createJanitorRuleEngine();
         if (configuration().getBoolOrElse("simianarmy.janitor.rule.orphanedInstanceRule.enabled", false)) {
             ruleEngine.addRule(new OrphanedInstanceRule(monkeyCalendar,
                     (int) configuration().getNumOrElse(
@@ -264,7 +268,7 @@ public class BasicJanitorMonkeyContext extends BasicSimianArmyContext implements
     }
 
     private EBSVolumeJanitor getEBSVolumeJanitor() {
-        JanitorRuleEngine ruleEngine = createJanitorRuleEngine();
+        //JanitorRuleEngine ruleEngine = createJanitorRuleEngine();
         if (configuration().getBoolOrElse("simianarmy.janitor.rule.oldDetachedVolumeRule.enabled", false)) {
             ruleEngine.addRule(new OldDetachedVolumeRule(monkeyCalendar,
                     (int) configuration().getNumOrElse(
@@ -302,7 +306,7 @@ public class BasicJanitorMonkeyContext extends BasicSimianArmyContext implements
     }
 
     private EBSSnapshotJanitor getEBSSnapshotJanitor() {
-        JanitorRuleEngine ruleEngine = createJanitorRuleEngine();
+        //JanitorRuleEngine ruleEngine = createJanitorRuleEngine();
         if (configuration().getBoolOrElse("simianarmy.janitor.rule.noGeneratedAMIRule.enabled", false)) {
             ruleEngine.addRule(new NoGeneratedAMIRule(monkeyCalendar,
                     (int) configuration().getNumOrElse("simianarmy.janitor.rule.noGeneratedAMIRule.ageThreshold", 30),
@@ -336,7 +340,7 @@ public class BasicJanitorMonkeyContext extends BasicSimianArmyContext implements
     }
 
     private LaunchConfigJanitor getLaunchConfigJanitor() {
-        JanitorRuleEngine ruleEngine = createJanitorRuleEngine();
+        //JanitorRuleEngine ruleEngine = createJanitorRuleEngine();
         if (configuration().getBoolOrElse("simianarmy.janitor.rule.oldUnusedLaunchConfigRule.enabled", false)) {
             ruleEngine.addRule(new OldUnusedLaunchConfigRule(monkeyCalendar,
                     (int) configuration().getNumOrElse(
@@ -378,7 +382,7 @@ public class BasicJanitorMonkeyContext extends BasicSimianArmyContext implements
             throw new RuntimeException("Image Janitor only works when Edda is enabled.");
         }
 
-        JanitorRuleEngine ruleEngine = createJanitorRuleEngine();
+        //JanitorRuleEngine ruleEngine = createJanitorRuleEngine();
         if (configuration().getBoolOrElse("simianarmy.janitor.rule.unusedImageRule.enabled", false)) {
             ruleEngine.addRule(new UnusedImageRule(monkeyCalendar,
                     (int) configuration().getNumOrElse(
@@ -404,7 +408,7 @@ public class BasicJanitorMonkeyContext extends BasicSimianArmyContext implements
 
 
     private ELBJanitor getELBJanitor() {
-        JanitorRuleEngine ruleEngine = createJanitorRuleEngine();
+        //JanitorRuleEngine ruleEngine = createJanitorRuleEngine();
         if (configuration().getBoolOrElse("simianarmy.janitor.rule.orphanedELBRule.enabled", false)) {
             ruleEngine.addRule(new OrphanedELBRule(monkeyCalendar,
                 (int) configuration().getNumOrElse(
